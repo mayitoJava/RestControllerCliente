@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://wwww.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+        <!-- Bootstrap Icons -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    </head>
+    <body layout:fragment="body">
+        <br><br>
+
+        <div class="container">
+
+            <button id="mostrarFormulario" class="btn btn-primary" onclick="mostrarFormulario()">
+                <i class="bi bi-file-earmark-plus"></i> Mostrar Formulario
+            </button>
+
+            <div id="botones" class="row m-3" style="display:none">
+                <div class="btn-group">
+                    <button class="btn btn-success col-md-6" id="btnExcel">
+                        <i class="bi bi-file-earmark-excel"></i> Excel
+                    </button>
+                    <button class="btn btn-primary col-md-6" id="btnTxt">
+                        <i class="bi bi-file-earmark-text"></i> TXT
+                    </button>
+                </div>
+            </div>
+
+            <div id="formularioArchivo" style="display: none" class="mt-3">
+                <br>
+                <form action="/usuario/CargaMasiva" method="post" enctype="multipart/form-data">
+                    <input type="file" id="archivo" name="archivo" accept=".xlsx,.txt">
+                    <button type="submit" class="btn btn-success" id="cargaMasiva">
+                        <i class="bi bi-upload"></i> Subir Archivo
+                    </button>
+                </form>
+            </div>
+
+            <div th:if="${listaErrores != null}">
+                <div th:if="${listaErrores.isEmpty()}">
+                    <h4><i class="bi bi-check-circle text-success"></i> Archivo correcto:</h4>
+                    <a th:href="@{/CargaMasiva/procesar}" class="btn btn-success">
+                        <i class="bi bi-play-circle"></i> Procesar archivo
+                    </a>
+                </div>
+                <div th:unless="${listaErrores.isEmpty()}">
+                    <h4><i class="bi bi-x-circle text-danger"></i> Archivo incorrecto:</h4>
+                    <table class="table table-responsive table-bordered">
+                        <thead class="table-dark">
+                        <th class="col-2"><i class="bi bi-hash"></i> Linea</th>
+                        <th><i class="bi bi-text-paragraph"></i> Texto</th>
+                        <th><i class="bi bi-exclamation-circle"></i> Error</th>
+                        </thead>
+                        <tbody>
+                            <tr th:each="error :${listaErrores}">
+                                <td th:text="${error.linea}"></td> 
+                                <td th:text="${error.Campo}"></td> 
+                                <td th:text="${error.Descripcion}"></td> 
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <script>
+            function mostrarFormulario() {
+                document.getElementById("mostrarFormulario").style.display = "none";
+                document.getElementById("botones").style.display = "block";
+            }
+
+            let tipoArchivo = "";
+
+            document.getElementById("btnExcel").addEventListener("click", function () {
+                tipoArchivo = "xlsx";
+                document.getElementById("formularioArchivo").style.display = "block";
+                document.getElementById("archivo").setAttribute("accept", ".xlsx");
+                document.getElementById("cargaMasiva").classList.remove("btn-primary");
+                document.getElementById("cargaMasiva").classList.add("btn-success");
+            });
+
+            document.getElementById("btnTxt").addEventListener("click", function () {
+                tipoArchivo = "txt";
+                document.getElementById("formularioArchivo").style.display = "block";
+                document.getElementById("archivo").setAttribute("accept", ".txt");
+                document.getElementById("cargaMasiva").classList.remove("btn-success");
+                document.getElementById("cargaMasiva").classList.add("btn-primary");
+            });
+
+            document.getElementById("archivo").addEventListener("change", function () {
+                if (this.files.length > 0) {
+                    var fileName = this.files[0].name;
+                    var fileExtension = fileName.split('.').pop().toLowerCase();
+
+                    if (fileExtension !== tipoArchivo) {
+                        alert("Por favor, seleccione un archivo " + tipoArchivo.toUpperCase() + " válido.");
+                        this.value = "";
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>

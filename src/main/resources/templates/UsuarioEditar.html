@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Editar Usuario - Diseño</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    </head>
+    <body class="container mt-5">
+        <div class="row g-4" th:each="usuario : ${usuario}">
+            <div class="col-md-6">
+                <h2 class="text-center mb-4">
+                    <i class="bi bi-person-gear"></i> Editar Usuario
+                </h2>
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        Datos Personales
+                    </div>
+                    <div>
+                        <label class="form-label"> 
+                            <strong>Nombre:</strong> <span th:text="${usuario.Nombre}"></span><br/>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="form-label"> 
+                            <strong>Apellido Paterno:</strong> <span th:text="${usuario.ApellidoPaterno}"></span><br/>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="form-label">
+                            <strong>Apellido Materno:</strong> <span th:text="${usuario.ApellidoMaterno}"></span><br/>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="form-label">
+                            <strong>Username:</strong> <span th:text="${usuario.Username}"></span></br>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="form-label">
+                            <strong>Telefono:</strong> <span th:text="${usuario.Telefono}"></span><br/>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="form-label">
+                            <strong>Email:</strong> <span th:text="${usuario.Email}"></span><br/>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="form-label">
+                            <strong>Celular:</strong> <span th:text="${usuario.Celular}"></span><br/>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="form-label">
+                            <strong>Sexo:</strong> <span th:text="${usuario.Sexo}"></span><br/>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="form-label">
+                            <strong>Password:</strong> <span th:text="${usuario.Password}"></span><br/>
+                        </label>
+                    </div>
+                    <div class="card-body">
+                        <a class="btn btn-primary mb-3 w-100"
+                           data-bs-toggle="modal"
+                           data-bs-target="#modalUsuario"
+                           th:onclick="|ShowModalUsuarioEdit(${usuario.IdUsuario})|">
+                            <i class="bi bi-plus-circle"></i> Editar Datos Personales
+                        </a>
+                    </div>       
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-dark text-white">
+                        Direcciones
+                    </div>                  
+                    <div class="card-body"> 
+                        <button type="button" class="btn btn-secondary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalDireccion">
+                            <i class="bi bi-geo-alt-fill me-1"></i> Agregar dirección
+                        </button>
+                        </br>
+                        </br>
+                        <div id="listaDirecciones">
+                            <div class="card p-3 mb-3 shadow-sm"
+                                 th:each="direccion : ${usuario.direcciones}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p><strong>Calle:</strong> <span th:text="${direccion.calle}"></span></p>
+                                        <p><strong>Número Exterior:</strong> <span th:text="${direccion.numeroExterior}"></span></p>
+                                        <p><strong>Número Interior:</strong> <span th:text="${direccion.numeroInterior}"></span></p>
+                                        <p><strong>Colonia:</strong> <span th:text="${direccion.colonia.nombre}"></span></p>
+                                        <p><strong>Municipio:</strong> <span th:text="${direccion.colonia.municipio.nombre}"></span></p>
+                                        <p><strong>Estado:</strong> <span th:text="${direccion.colonia.municipio.estado.nombre}"></span></p>
+                                        <p><strong>País:</strong> <span th:text="${direccion.colonia.municipio.estado.pais.nombre}"></span></p>                             
+                                    </div>
+                                    <div>
+                                        <a class="btn btn-warning btn-sm me-2"
+                                           data-bs-toggle="modal"
+                                           data-bs-target="#modalDireccion" th:onclick="|ShowModalDireccionEdit(${direccion.IdDireccion})|">
+                                            <i class="bi bi-pencil-square"></i> Editar
+                                        </a>
+
+                                        <a class="btn btn-danger btn-sm">
+                                            <i class="bi bi-trash"></i> Borrar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalDireccion" tabindex="-1"
+             aria-labelledby="modalDireccionLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+
+                    <!-- Header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalDireccionLabel">Dirección</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="modal-body">
+                        <form th:object="${Direccion}" method="post" th:action="@{/usuario/GuardarDireccion}">
+                            <!--<input type="hidden" id="hiddenIdDireccion" th:value="*{usuario[0].Direcciones[0].IdDireccion}" />-->
+                            <input type="hidden" id="hiddenIdDireccion" th:field="${Direccion.IdDireccion}"/>
+
+                            <div class="row g-3">
+
+                                <!-- Calle -->
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="intpCalle" placeholder="Calle" th:field="*{Calle}">
+                                        <label for="intpCalle">Calle</label>
+                                    </div>
+                                </div>
+
+                                <!-- Número Exterior -->
+                                <div class="col-md-3">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="intpNumeroExterior" placeholder="No. Exterior" th:field="*{NumeroExterior}">
+                                        <label for="intpNumeroExterior">Número Exterior</label>
+                                    </div>
+                                </div>
+
+                                <!-- Número Interior -->
+                                <div class="col-md-3">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="intpNumeroInterior" placeholder="No. Interior" th:field="*{NumeroInterior}">
+                                        <label for="intpNumeroInterior">Número Interior</label>
+                                    </div>
+                                </div>
+
+                                <!-- País -->
+                                <div class="col-md-3">
+                                    <label for="ddlPais" class="form-label">País</label>
+                                    <select class="form-select" id="ddlPais">
+                                        <option value="">Selecciona un país</option>
+                                    </select>
+                                </div>
+
+                                <!-- Estado -->
+                                <div class="col-md-3">
+                                    <label for="ddlEstado" class="form-label">Estado</label>
+                                    <select class="form-select" id="ddlEstado">
+                                        <option value="">Selecciona un estado</option>
+                                    </select>
+                                </div>
+
+                                <!-- Municipio -->
+                                <div class="col-md-3">
+                                    <label for="ddlMunicipio" class="form-label">Municipio</label>
+                                    <select class="form-select" id="ddlMunicipio">
+                                        <option value="">Selecciona un municipio</option>
+                                    </select>
+                                </div>
+
+                                <!-- Colonia -->
+                                <div class="col-md-3">
+                                    <label for="ddlColonia" class="form-label">Colonia</label>
+                                    <select class="form-select" id="ddlColonia">
+                                        <option value="">Selecciona una colonia</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-success" id="btnGuardarDireccion">Guardar dirección</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modalUsuario" tabindex="-1"
+         aria-labelledby="modalUsuarioLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+
+                <!-- Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalUsuarioLabel">
+                        Datos del Usuario
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- Body -->
+                <div class="modal-body">
+                    <form id="formUsuario">
+                        <input type="hidden" id="intpIdUsuario">
+                        <div class="row g-3">
+
+                            <!-- Nombre -->
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="intpNombre">
+                                    <label>Nombre</label>
+                                </div>
+                            </div>
+
+                            <!-- Apellido Paterno -->
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="intpApellidoPaterno">
+                                    <label>Apellido Paterno</label>
+                                </div>
+                            </div>
+
+                            <!-- Apellido Materno -->
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="intpApellidoMaterno">
+                                    <label>Apellido Materno</label>
+                                </div>
+                            </div>
+
+                            <!-- Username -->
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="intpUsername">
+                                    <label>Username</label>
+                                </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <input type="email" class="form-control" id="intpEmail">
+                                    <label>Email</label>
+                                </div>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="intpPassword">
+                                    <label>Password</label>
+                                </div>
+                            </div>
+
+                            <!-- Fecha Nacimiento -->
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <input type="date" class="form-control" id="intpFechaNacimiento">
+                                    <label>Fecha Nacimiento</label>
+                                </div>
+                            </div>
+
+                            <!-- Celular -->
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="intpCelular">
+                                    <label>Celular</label>
+                                </div>
+                            </div>
+
+                            <!-- Teléfono -->
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="intpTelefono">
+                                    <label>Teléfono</label>
+                                </div>
+                            </div>
+
+                            <!-- CURP -->
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="intpCurp">
+                                    <label>CURP</label>
+                                </div>
+                            </div>
+
+                            <!-- Sexo -->
+                            <div class="col-md-4">
+                                <label class="form-label">Sexo</label>
+                                <div class="d-flex gap-4 mt-1">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="sexo" id="sexoMasculino" value="M ">
+                                        <label class="form-check-label">Masculino</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="sexo" id="sexoFemenino" value="F ">
+                                        <label class="form-check-label">Femenino</label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cerrar
+                    </button>
+                    <button type="button" class="btn btn-success" id="btnGuardarUsuario">
+                        Guardar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script>
+        function ShowModalDireccionEdit(IdDireccion) {
+            console.log("IdDireccion recibido:", IdDireccion);
+
+            // ✅ ESTA LÍNEA ES LA CLAVE (ANTES NO ESTABA)
+            $('#hiddenIdDireccion').val(IdDireccion);
+
+            $.ajax({
+                url: '/usuario/GetByIdDireccion/' + IdDireccion,
+                type: 'GET',
+                dataType: 'json',
+                success: function (result) {
+                    console.log("RESULTADO COMPLETO:", result);
+
+                    // Llenar campos básicos
+                    $('#intpCalle').val(result.Object.calle);
+                    $('#intpNumeroExterior').val(result.Object.numeroExterior);
+                    $('#intpNumeroInterior').val(result.Object.numeroInterior);
+
+                    // IDs de ubicación
+                    const idPais = result.Object.Colonia.municipio.Estado.Pais.idPais;
+                    const idEstado = result.Object.Colonia.municipio.Estado.idEstado;
+                    const idMunicipio = result.Object.Colonia.municipio.idMunicipio;
+                    const idColonia = result.Object.Colonia.idColonia;
+
+                    function llenarSelect(url, selectId, selectedId, placeholder) {
+                        $.ajax({
+                            url: url,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function (data) {
+                                const $select = $(selectId);
+                                $select.empty().append(`<option value="">${placeholder}</option>`);
+
+                                $.each(data.Objects, function (i, item) {
+                                    let value;
+                                    if (item.idPais)
+                                        value = item.idPais;
+                                    else if (item.idEstado)
+                                        value = item.idEstado;
+                                    else if (item.idMunicipio)
+                                        value = item.idMunicipio;
+                                    else if (item.idColonia)
+                                        value = item.idColonia;
+
+                                    $select.append(`<option value="${value}">${item.nombre}</option>`);
+                                });
+
+                                if (selectedId) {
+                                    $select.val(selectedId).trigger('change');
+                                }
+                            }
+                        });
+                    }
+
+                    // Llenar país
+                    llenarSelect('/usuario/getPaises', '#ddlPais', idPais, 'Selecciona un país');
+
+                    $('#ddlPais').off('change').on('change', function () {
+                        llenarSelect('/usuario/GetEstadoByPais/' + $(this).val(),
+                                '#ddlEstado', idEstado, 'Selecciona un estado');
+                    });
+
+                    $('#ddlEstado').off('change').on('change', function () {
+                        llenarSelect('/usuario/GetMunicipioByEstado/' + $(this).val(),
+                                '#ddlMunicipio', idMunicipio, 'Selecciona un municipio');
+                    });
+
+                    $('#ddlMunicipio').off('change').on('change', function () {
+                        llenarSelect('/usuario/GetColoniaByMunicipio/' + $(this).val(),
+                                '#ddlColonia', idColonia, 'Selecciona una colonia');
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error("Status:", textStatus);
+                    console.error("Error:", errorThrown);
+                    console.error("Response:", jqXHR.responseText);
+                }
+            });
+
+            $('#modalDireccion').modal('show');
+        }
+
+//        $('#btnGuardarDireccion').on('click', function () {
+//            const direccionData = {
+//                IdDireccion: parseInt($('#hiddenIdDireccion').val() || 0),
+//                Calle: $('#intpCalle').val(),
+//                NumeroExterior: $('#intpNumeroExterior').val(),
+//                NumeroInterior: $('#intpNumeroInterior').val(),
+//                IdPais: $('#ddlPais').val(),
+//                IdEstado: $('#ddlEstado').val(),
+//                IdMunicipio: $('#ddlMunicipio').val(),
+//                IdColonia: $('#ddlColonia').val()
+//            };
+//
+//            // Validación básica
+//            if (!direccionData.Calle || !direccionData.NumeroExterior || !direccionData.IdPais || !direccionData.IdEstado || !direccionData.IdMunicipio || !direccionData.IdColonia) {
+//                alert("Por favor completa todos los campos obligatorios.");
+//                return;
+//            }
+//
+//            alert(JSON.stringify(direccionData));
+//
+//            $.ajax({
+//                url: '/usuario/GuardarDireccion',
+//                type: 'POST',
+//                contentType: 'application/json',
+//                data: JSON.stringify(direccionData),
+//                success: function (result) {
+//                    if (result.success) {
+//                        alert(result.message);
+//                        $('#modalDireccion').modal('hide');
+//                        location.reload(); // o recargar solo el listado de direcciones
+//                    } else {
+//                        alert("Error: " + result.message);
+//                    }
+//                },
+//                error: function (xhr) {
+//                    console.error("Error al guardar dirección:", xhr.responseText);
+//                    alert("Ocurrió un error al guardar la dirección");
+//                }
+//            });
+//        });
+
+        function ShowModalUsuarioEdit(IdUsuario) {
+
+            console.log("IdUsuario recibido:", IdUsuario);
+
+            $.ajax({
+                url: '/usuario/GetByIdUsuario/' + IdUsuario,
+                type: 'GET',
+                dataType: 'json',
+                success: function (result) {
+
+                    console.log("Usuario leído:", result);
+                    let u = result.Object;
+
+                    // Llenar campos
+                    $('#intpIdUsuario').val(u.idUsuario);
+                    $('#intpUsername').val(u.username);
+                    $('#intpNombre').val(u.nombre);
+                    $('#intpApellidoPaterno').val(u.apellidoPaterno);
+                    $('#intpApellidoMaterno').val(u.apellidoMaterno);
+                    $('#intpEmail').val(u.email);
+                    $('#intpPassword').val(u.password);
+                    $('#intpCelular').val(u.celular);
+                    $('#intpTelefono').val(u.telefono);
+                    $('#intpCurp').val(u.curp);
+
+                    // Fecha
+                    if (u.fechaNacimiento) {
+                        let fecha = new Date(u.fechaNacimiento);
+                        $('#intpFechaNacimiento').val(fecha.toISOString().split('T')[0]);
+                    }
+
+                    // Sexo
+                    $('input[name="sexo"]').prop('checked', false); // limpiar selección
+                    $(`input[name="sexo"][value="${u.sexo}"]`).prop('checked', true);
+
+                    // Mostrar modal
+                    $('#modalUsuario').modal('show');
+                },
+                error: function (err) {
+                    console.error("Error al cargar usuario", err);
+                }
+            });
+        }
+
+        $('#btnGuardarUsuario').click(function () {
+            let usuario = {
+                idUsuario: parseInt($('#intpIdUsuario').val() || 0),
+                username: $('#intpUsername').val(),
+                nombre: $('#intpNombre').val(),
+                apellidoPaterno: $('#intpApellidoPaterno').val(),
+                apellidoMaterno: $('#intpApellidoMaterno').val(),
+                email: $('#intpEmail').val(),
+                password: $('#intpPassword').val(),
+                celular: $('#intpCelular').val(),
+                telefono: $('#intpTelefono').val(),
+                curp: $('#intpCurp').val(),
+                fechaNacimiento: $('#intpFechaNacimiento').val(),
+                sexo: $('input[name="sexo"]:checked').val()
+            };
+
+            $.ajax({
+                url: '/usuario/formEditable',
+                type: 'POST',
+                data: usuario, // form-urlencoded
+                success: function (response) {
+                    $('#modalUsuario').modal('hide');
+                    alert("Usuario guardado correctamente");
+                    location.reload();
+                },
+                error: function (xhr) {
+                    console.error("Error al guardar usuario:", xhr.responseText);
+                    alert("Error al guardar usuario");
+                }
+            });
+        });
+
+
+    </script>
+
+</body>
+</html>
