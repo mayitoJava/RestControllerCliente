@@ -25,7 +25,7 @@
 
             <input type="hidden" th:field="*{IdUsuario}">
             <input type="hidden" th:field="*{Direcciones[0].IdDireccion}">
-            
+
             <div class="row g-3"
                  th:if="${(usuario.IdUsuario == 0 && usuario.Direcciones[0].IdDireccion == 0) 
                  || (usuario.IdUsuario != 0 && usuario.Direcciones[0].IdDireccion == -1)}">
@@ -223,182 +223,207 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
         <script>
-                       function SoloLetras(event, input) {
-                           let key = event.key;
-                           let asci = event.keyCode;
-                           let RegExp = /[a-zA-Z]+/;
-                           if (asci >= 65 && asci <= 90 || asci >= 97 && asci <= 122) {
+                                   function SoloLetras(event, input) {
+                                       let key = event.key;
+                                       let asci = event.keyCode;
+                                       let RegExp = /[a-zA-Z]+/;
+                                       if (asci >= 65 && asci <= 90 || asci >= 97 && asci <= 122) {
 
-                               if (RegExp.test(key)) {
-                                   $(input).removeClass("error").addClass("correct");
-                                   $(input).siblings(".error-msg").text(" ");
-                               } else {
-                                   $(input).removeClass("correct").addClass("error");
-                                   $(input).siblings(".error-msg").text("Solo Letras");
-                                   event.preventDefault();
-                               }
-                           } else {
-                               $(input).removeClass("correct").addClass("error");
-                               $(input).siblings(".error-msg").text("Solo Letras");
-                               event.preventDefault();
-                           }
-                       }
-
-                       function validarUsername(event, input) { //validacion username
-                           let cadena = event.target.value;
-                           let regex = /^(?=.*[0-9])[A-Z][a-zA-Z0-9(#$%&)]+$/; // Solo letras, números y caracter especial
-
-                           if (regex.test(cadena)) {
-                               $(input).removeClass("error").addClass("correct");
-                               $(input).siblings(".error-msg").text(" ");
-                           } else {
-                               $(input).removeClass("correct").addClass("error");
-                               $(input).siblings(".error-msg").text("Solo letras y números");
-                               event.preventDefault();
-                           }
-                       }
-
-                       function validarPassword(event, input) {
-                           let password = event.target.value;
-                           let PasExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/;
-                           if (PasExp.test(password)) {
-                               $(input).removeClass("error").addClass("correct");
-                               $(input).siblings(".error-msg").text("");
-                           } else {
-                               $(input).removeClass("correct").addClass("error");
-                               $(input).siblings(".error-msg").text("La contraseña no cumple los requisitos");
-                           }
-                       }
-
-                       function validarCorreo(event, input) {
-                           let correo = event.target.value;
-                           let EmailExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-                           if (EmailExp.test(correo)) {
-                               $(input).removeClass("error").addClass("correct");
-                               $(input).siblings(".error-msg").text("");
-                           } else {
-                               $(input).removeClass("correct").addClass("error");
-                               $(input).siblings(".error-msg").text("Correo inválido");
-                           }
-                       }
-
-                       function validarFecha(event, input) {
-                           let fechaInput = event.target.value;
-                           let errorSpan = $(input).siblings(".error-msg");
-                           let fechaValida = new Date(fechaInput);
-                           let hoy = new Date();
-                           if (fechaValida > hoy) {
-                               $(input).removeClass("correct").addClass("error");
-                               errorSpan.text("La fecha no puede ser mayor a hoy.");
-                               return false;
-                           } else {
-                               $(input).removeClass("error").addClass("correct");
-                               errorSpan.text("");
-                               return true;
-                           }
-                       }
-
-                       function validarCurp(event, input) {
-                           let password = event.target.value;
-                           let CurExp = /^[A-Z]{4}\d{6}[HM][A-Z]{2}[B-DF-HJ-NP-TV-Z]{3}[A-Z0-9]\d$/;
-                           if (CurExp.test(password)) {
-                               $(input).removeClass("error").addClass("correct");
-                               $(input).siblings(".error-msg").text("");
-                           } else {
-                               $(input).removeClass("correct").addClass("error");
-                               $(input).siblings(".error-msg").text("Tu CURP no cumple los requisitos");
-                           }
-                       }
-
-                       function validarSexo() {
-                           const sexoSeleccionado = document.querySelector('input[name="sexo"]:checked');
-                           if (sexoSeleccionado) {
-                               alert("Sexo seleccionado: " + sexoSeleccionado.value);
-                           } else {
-                               alert("Por favor selecciona un sexo.");
-                           }
-                       }
-
-                       function validarNumero(event, input) {
-                           let numero = event.target.value;
-                           let RegExp = /^(?:\d-?){10}$/;
-                           if (RegExp.test(numero)) {
-                               $(input).removeClass("error").addClass("correct");
-                               $(input).siblings(".error-msg").text("");
-                           } else {
-                               $(input).removeClass("correct").addClass("error");
-                               $(input).siblings(".error-msg").text("Escribe bien el numero");
-                           }
-                       }
-
-                       $(document).ready(function () {
-                           console.log("Ya prendí tu :)");
-                           $("#ddlPais").change(function () {
-                               $.ajax({
-                                   url: "http://localhost:8080/api/estado/GetEstadosByPais/" + $("#ddlPais").val(),
-                                   method: 'GET',
-                                   dataType: 'json',
-                                   success: function (data, textStatus, jqXHR) {
-                                       if (data.Correct) {
-                                           $("#ddlEstado").empty();
-                                           $("#ddlEstado").append("<option value='0' selected>Selecciona un Estado</option>");
-                                           $.each(data.Objects, function (i, estado) {
-                                               $("#ddlEstado").append("<option value='" + estado.idEstado + "'>" + estado.nombre + "</option>");
-                                           });
+                                           if (RegExp.test(key)) {
+                                               $(input).removeClass("error").addClass("correct");
+                                               $(input).siblings(".error-msg").text(" ");
+                                           } else {
+                                               $(input).removeClass("correct").addClass("error");
+                                               $(input).siblings(".error-msg").text("Solo Letras");
+                                               event.preventDefault();
+                                           }
+                                       } else {
+                                           $(input).removeClass("correct").addClass("error");
+                                           $(input).siblings(".error-msg").text("Solo Letras");
+                                           event.preventDefault();
                                        }
-                                   },
-                                   error: function (jqXHR, textStatus, errorThrown) {
-                                       alert("Algo ocurrió mal :c");
                                    }
-                               });
-                           });
-                       });
 
-                       $(document).ready(function () {
-                           console.log("Ya prendí tu :)");
-                           $("#ddlEstado").change(function () {
-                               $.ajax({
-                                   url: "http://localhost:8080/api/municipio/GetMunicipioByEstado/" + $("#ddlEstado").val(),
-                                   method: 'GET',
-                                   dataType: 'json',
-                                   success: function (data, textStatus, jqXHR) {
-                                       if (data.Correct) {
-                                           $("#ddlMunicipio").empty();
-                                           $("#ddlMunicipio").append("<option value='0' selected>Selecciona un Municipio</option>");
-                                           $.each(data.Objects, function (i, municipio) {
-                                               $("#ddlMunicipio").append("<option value='" + municipio.idMunicipio + "'>" + municipio.nombre + "</option>");
-                                           });
-                                       }
-                                   },
-                                   error: function (jqXHR, textStatus, errorThrown) {
-                                       alert("Algo ocurrió mal :c");
-                                   }
-                               });
-                           });
-                       });
+                                   function validarUsername(event, input) { //validacion username
+                                       let cadena = event.target.value;
+                                       let regex = /^(?=.*[0-9])[A-Z][a-zA-Z0-9(#$%&)]+$/; // Solo letras, números y caracter especial
 
-                       $(document).ready(function () {
-                           console.log("Ya prendí tu :)");
-                           $("#ddlMunicipio").change(function () {
-                               $.ajax({
-                                   url: "http://localhost:8080/api/colonia/GetColoniaByMunicipio/"  + $("#ddlMunicipio").val(),
-                                   method: 'GET',
-                                   dataType: 'json',
-                                   success: function (data, textStatus, jqXHR) {
-                                       if (data.Correct) {
-                                           $("#ddlColonia").empty();
-                                           $("#ddlColonia").append("<option value='0' selected>Selecciona un Municipio</option>");
-                                           $.each(data.Objects, function (i, colonia) {
-                                               $("#ddlColonia").append("<option value='" + colonia.idColonia + "'>" + colonia.nombre + "</option>");
-                                           });
+                                       if (regex.test(cadena)) {
+                                           $(input).removeClass("error").addClass("correct");
+                                           $(input).siblings(".error-msg").text(" ");
+                                       } else {
+                                           $(input).removeClass("correct").addClass("error");
+                                           $(input).siblings(".error-msg").text("Solo letras y números");
+                                           event.preventDefault();
                                        }
-                                   },
-                                   error: function (jqXHR, textStatus, errorThrown) {
-                                       alert("Algo ocurrió mal :c");
                                    }
-                               });
-                           });
-                       });
+
+                                   function validarPassword(event, input) {
+                                       let password = event.target.value;
+                                       let PasExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/;
+                                       if (PasExp.test(password)) {
+                                           $(input).removeClass("error").addClass("correct");
+                                           $(input).siblings(".error-msg").text("");
+                                       } else {
+                                           $(input).removeClass("correct").addClass("error");
+                                           $(input).siblings(".error-msg").text("La contraseña no cumple los requisitos");
+                                       }
+                                   }
+
+                                   function validarCorreo(event, input) {
+                                       let correo = event.target.value;
+                                       let EmailExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                                       if (EmailExp.test(correo)) {
+                                           $(input).removeClass("error").addClass("correct");
+                                           $(input).siblings(".error-msg").text("");
+                                       } else {
+                                           $(input).removeClass("correct").addClass("error");
+                                           $(input).siblings(".error-msg").text("Correo inválido");
+                                       }
+                                   }
+
+                                   function validarFecha(event, input) {
+                                       let fechaInput = event.target.value;
+                                       let errorSpan = $(input).siblings(".error-msg");
+                                       let fechaValida = new Date(fechaInput);
+                                       let hoy = new Date();
+                                       if (fechaValida > hoy) {
+                                           $(input).removeClass("correct").addClass("error");
+                                           errorSpan.text("La fecha no puede ser mayor a hoy.");
+                                           return false;
+                                       } else {
+                                           $(input).removeClass("error").addClass("correct");
+                                           errorSpan.text("");
+                                           return true;
+                                       }
+                                   }
+
+                                   function validarCurp(event, input) {
+                                       let password = event.target.value;
+                                       let CurExp = /^[A-Z]{4}\d{6}[HM][A-Z]{2}[B-DF-HJ-NP-TV-Z]{3}[A-Z0-9]\d$/;
+                                       if (CurExp.test(password)) {
+                                           $(input).removeClass("error").addClass("correct");
+                                           $(input).siblings(".error-msg").text("");
+                                       } else {
+                                           $(input).removeClass("correct").addClass("error");
+                                           $(input).siblings(".error-msg").text("Tu CURP no cumple los requisitos");
+                                       }
+                                   }
+
+                                   function validarSexo() {
+                                       const sexoSeleccionado = document.querySelector('input[name="sexo"]:checked');
+                                       if (sexoSeleccionado) {
+                                           alert("Sexo seleccionado: " + sexoSeleccionado.value);
+                                       } else {
+                                           alert("Por favor selecciona un sexo.");
+                                       }
+                                   }
+
+                                   function validarNumero(event, input) {
+                                       let numero = event.target.value;
+                                       let RegExp = /^(?:\d-?){10}$/;
+                                       if (RegExp.test(numero)) {
+                                           $(input).removeClass("error").addClass("correct");
+                                           $(input).siblings(".error-msg").text("");
+                                       } else {
+                                           $(input).removeClass("correct").addClass("error");
+                                           $(input).siblings(".error-msg").text("Escribe bien el numero");
+                                       }
+                                   }
+
+                                   $(document).ready(function () {
+                                       console.log("Ya prendí tu :)");
+
+                                       // Cuando cambias el país
+                                       $("#ddlPais").change(function () {
+                                           var idPais = $("#ddlPais").val();
+
+                                           // Limpiamos los dropdowns inferiores
+                                           $("#ddlEstado").empty().append("<option value='0' selected>Selecciona un Estado</option>");
+                                           $("#ddlMunicipio").empty().append("<option value='0' selected>Selecciona un Municipio</option>");
+                                           $("#ddlColonia").empty().append("<option value='0' selected>Selecciona una Colonia</option>");
+
+                                           if (idPais == 0)
+                                               return;
+
+                                           $.ajax({
+                                               url: "http://localhost:8080/api/estado/GetEstadoByPais/" + idPais,
+                                               method: 'GET',
+                                               dataType: 'json',
+                                               success: function (data) {
+                                                   if (data.Correct) {
+                                                       $.each(data.Object, function (i, estado) {
+                                                           $("#ddlEstado").append("<option value='" + estado.idEstado + "'>" + estado.nombre + "</option>");
+                                                       });
+                                                   } else {
+                                                       alert("No se pudieron cargar los estados: " + data.ErrorMessage);
+                                                   }
+                                               },
+                                               error: function (jqXHR, textStatus, errorThrown) {
+                                                   alert("Error al obtener estados: " + textStatus);
+                                               }
+                                           });
+                                       });
+
+                                       // Cuando cambias el estado
+                                       $("#ddlEstado").change(function () {
+                                           var idEstado = $("#ddlEstado").val();
+
+                                           // Limpiamos los dropdowns inferiores
+                                           $("#ddlMunicipio").empty().append("<option value='0' selected>Selecciona un Municipio</option>");
+                                           $("#ddlColonia").empty().append("<option value='0' selected>Selecciona una Colonia</option>");
+
+                                           if (idEstado == 0)
+                                               return;
+
+                                           $.ajax({
+                                               url: "http://localhost:8080/api/municipio/GetMunicipioByEstado/" + idEstado,
+                                               method: 'GET',
+                                               dataType: 'json',
+                                               success: function (data) {
+                                                   if (data.Correct) {
+                                                       $.each(data.Object, function (i, municipio) {
+                                                           $("#ddlMunicipio").append("<option value='" + municipio.idMunicipio + "'>" + municipio.nombre + "</option>");
+                                                       });
+                                                   } else {
+                                                       alert("No se pudieron cargar los municipios: " + data.ErrorMessage);
+                                                   }
+                                               },
+                                               error: function (jqXHR, textStatus, errorThrown) {
+                                                   alert("Error al obtener municipios: " + textStatus);
+                                               }
+                                           });
+                                       });
+
+                                       // Cuando cambias el municipio
+                                       $("#ddlMunicipio").change(function () {
+                                           var idMunicipio = $("#ddlMunicipio").val();
+
+                                           // Limpiamos el dropdown de colonias
+                                           $("#ddlColonia").empty().append("<option value='0' selected>Selecciona una Colonia</option>");
+
+                                           if (idMunicipio == 0)
+                                               return;
+
+                                           $.ajax({
+                                               url: "http://localhost:8080/api/colonia/GetColoniaByMunicipio/" + idMunicipio,
+                                               method: 'GET',
+                                               dataType: 'json',
+                                               success: function (data) {
+                                                   if (data.Correct) {
+                                                       $.each(data.Object, function (i, colonia) {
+                                                           $("#ddlColonia").append("<option value='" + colonia.idColonia + "'>" + colonia.nombre + "</option>");
+                                                       });
+                                                   } else {
+                                                       alert("No se pudieron cargar las colonias: " + data.ErrorMessage);
+                                                   }
+                                               },
+                                               error: function (jqXHR, textStatus, errorThrown) {
+                                                   alert("Error al obtener colonias: " + textStatus);
+                                               }
+                                           });
+                                       });
+                                   });
 
         </script>
 
