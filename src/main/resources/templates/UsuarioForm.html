@@ -335,7 +335,7 @@
                            console.log("Ya prendí tu :)");
                            $("#ddlPais").change(function () {
                                $.ajax({
-                                   url: "/usuario/GetEstadoByPais/" + $("#ddlPais").val(),
+                                   url: "http://localhost:8080/api/estado/GetEstadosByPais/" + $("#ddlPais").val(),
                                    method: 'GET',
                                    dataType: 'json',
                                    success: function (data, textStatus, jqXHR) {
@@ -358,7 +358,7 @@
                            console.log("Ya prendí tu :)");
                            $("#ddlEstado").change(function () {
                                $.ajax({
-                                   url: "/usuario/GetMunicipioByEstado/" + $("#ddlEstado").val(),
+                                   url: "http://localhost:8080/api/municipio/GetMunicipioByEstado/" + $("#ddlEstado").val(),
                                    method: 'GET',
                                    dataType: 'json',
                                    success: function (data, textStatus, jqXHR) {
@@ -381,7 +381,7 @@
                            console.log("Ya prendí tu :)");
                            $("#ddlMunicipio").change(function () {
                                $.ajax({
-                                   url: "/usuario/GetColoniaByMunicipio/" + $("#ddlMunicipio").val(),
+                                   url: "http://localhost:8080/api/colonia/GetColoniaByMunicipio/"  + $("#ddlMunicipio").val(),
                                    method: 'GET',
                                    dataType: 'json',
                                    success: function (data, textStatus, jqXHR) {
