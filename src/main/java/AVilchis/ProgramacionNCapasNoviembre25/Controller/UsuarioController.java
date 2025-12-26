@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
@@ -68,6 +70,26 @@ public class UsuarioController {
         usuario.Direcciones.add(new Direccion());
         model.addAttribute("usuario", usuario);
         return "UsuarioForm";
+    }
+
+    @PostMapping("/add")
+    public String AddUser(@ModelAttribute("usuario") Usuario usuario) {
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+
+            // Llamada POST al API para agregar usuario
+            HttpEntity<Usuario> request = new HttpEntity<>(usuario);
+            ResponseEntity<Result> response = restTemplate.exchange(
+                    urlBase + "/agregar", // Endpoint de tu API que maneja POST
+                    HttpMethod.POST,
+                    request,
+                    Result.class
+            );
+
+        } catch (Exception e) {
+
+        }
+        return "redirect:/usuario";
     }
 
 }
