@@ -132,25 +132,31 @@
                     <!-- Body -->
                     <div class="modal-body">
                         <form th:object="${Direccion}" method="post" th:action="@{/usuario/GuardarDireccion}">
-                            <input type="hidden" id="hiddenIdDireccion" th:value="${Direccion.IdDireccion}" />
+                            <input type="hidden" id="hiddenIdDireccion" th:field="*{IdDireccion}"/>
 
                             <div class="row g-3">
+
+                                <!-- Calle -->
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control" placeholder="Calle" th:field="${Direccion.Calle}">
-                                        <label>Calle</label>
+                                        <input type="text" class="form-control" id="intpCalle" placeholder="Calle" th:field="*{calle}">
+                                        <label for="intpCalle">Calle</label>
                                     </div>
                                 </div>
+
+                                <!-- Número Exterior -->
                                 <div class="col-md-3">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control" placeholder="Número Exterior" th:field="${Direccion.NumeroExterior}">
-                                        <label>Número Exterior</label>
+                                        <input type="text" class="form-control" id="intpNumeroExterior" placeholder="No. Exterior" th:field="*{numeroExterior}">
+                                        <label for="intpNumeroExterior">Número Exterior</label>
                                     </div>
                                 </div>
+
+                                <!-- Número Interior -->
                                 <div class="col-md-3">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control" placeholder="Número Interior" th:field="${Direccion.NumeroInterior}">
-                                        <label>Número Interior</label>
+                                        <input type="text" class="form-control" id="intpNumeroInterior" placeholder="No. Interior" th:field="*{numeroInterior}">
+                                        <label for="intpNumeroInterior">Número Interior</label>
                                     </div>
                                 </div>
 
@@ -303,18 +309,35 @@
                                     <div class="form-check">
                                         <input class="form-check-input"
                                                type="radio"
+                                               id="sexoMasculino"
                                                th:field="*{sexo}"
-                                               value="M">
-                                        <label class="form-check-label">Masculino</label>
+                                               th:value="M ">
+                                        <label class="form-check-label" for="sexoMasculino">
+                                            Masculino
+                                        </label>
                                     </div>
+
                                     <div class="form-check">
                                         <input class="form-check-input"
                                                type="radio"
+                                               id="sexoFemenino"
                                                th:field="*{sexo}"
-                                               value="F">
-                                        <label class="form-check-label">Femenino</label>
+                                               th:value="F ">
+                                        <label class="form-check-label" for="sexoFemenino">
+                                            Femenino
+                                        </label>
                                     </div>
                                 </div>
+                            </div>
+
+
+                            <!-- Rol -->
+                            <div class="col-md-4">
+                                <label for="RolUsuario" class="form-label"><i class="bi bi-controller"></i> Rol</label>
+                                <select class="form-select" id="RolUsuario" th:field="${usuario.Rol.IdRol}">
+                                    <option value="0">Selecciona un rol</option>
+                                    <option th:each="rol: ${rol}" th:text="${rol.Nombre}" th:value="${rol.IdRol}"></option>
+                                </select>
                             </div>
 
                         </div>
@@ -434,6 +457,7 @@
         });
 
     </script>
+
 
 
 </body>

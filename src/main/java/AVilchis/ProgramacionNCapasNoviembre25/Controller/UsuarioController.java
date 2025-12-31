@@ -76,51 +76,7 @@ public class UsuarioController {
         return "UsuarioForm";
     }
     
-//     @PostMapping("/add")
-//    public String addUsuario(@Valid @ModelAttribute("Usuario") Usuario usuario,BindingResult bindingResult,
-//            @RequestParam("imagenFile") MultipartFile imagenFile, Model model) {
-//
-//        if (bindingResult.hasErrors()) {
-//            model.addAttribute("Usuario", usuario);
-//            return "/FormUsu"; // Vuelve al formulario si hay errores
-//        }
-//
-//        
-//        RestTemplate restTemplate = new RestTemplate();
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-//        
-//        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-//
-//        // Parte 1: El objeto Usuario 
-//        HttpHeaders jsonHeaders = new HttpHeaders();
-//        jsonHeaders.setContentType(MediaType.APPLICATION_JSON);
-//        HttpEntity<Usuario> usuarioPart = new HttpEntity<>(usuario, jsonHeaders);
-//        body.add("usuario", usuarioPart);
-//
-//        // Parte 2: El archivo (si existe)
-//        if (imagenFile != null && !imagenFile.isEmpty()) {
-//            body.add("Imagen", imagenFile.getResource()); 
-//        }
-//
-//        // 3. Crear la petición completa
-//        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-//
-//        try {
-//            ResponseEntity<Result> response = restTemplate.exchange(
-//                    urlBase + "usuario/add",
-//                    HttpMethod.POST,
-//                    requestEntity,
-//                    Result.class
-//            );
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return "redirect:/usuario";
-//    }
+
 
     @GetMapping("detail/{IdUsuario}")
     public String Detail(@PathVariable("IdUsuario") int IdUsuario, Model model) {
@@ -138,7 +94,6 @@ public class UsuarioController {
                 });
 
         Result resultRol = responseEntityRol.getBody();
-        model.addAttribute("Roles", resultRol.Object);
 
         ResponseEntity<Result<List<Pais>>> responseEntityPais
                 = restTemplate.exchange(urlBase + "/pais", HttpMethod.GET,
@@ -150,9 +105,9 @@ public class UsuarioController {
         if (responseEntity.getStatusCode().value() == 200) {
             Result result = responseEntity.getBody();
 
-            model.addAttribute("Roles", resultRol.Object);
+            model.addAttribute("rol", resultRol.Object);
 
-            model.addAttribute("Paises", resultPais.Object);
+            model.addAttribute("pais", resultPais.Object);
 
             model.addAttribute("usuario", result.Object);
             
@@ -161,6 +116,8 @@ public class UsuarioController {
 
         return "UsuarioEditar";
     }
+    
+    
     
 
 }
