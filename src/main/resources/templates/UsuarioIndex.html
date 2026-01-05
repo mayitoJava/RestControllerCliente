@@ -56,42 +56,136 @@
                     </thead>
                     <tbody>
                         <tr th:each="usuario : ${usuarios}">
-                            <td class="table-info" th:text="|${usuario.Nombre} ${usuario.ApellidoPaterno} ${usuario.ApellidoMaterno}|"></td>
-                            <td>
-                                <strong>Username:</strong> <span th:text="${usuario.Username}"></span><br/>
-                                <strong>Email:</strong> <span th:text="${usuario.Email}"></span><br/>
-                                <strong>Sexo:</strong> <span th:text="${usuario.Sexo}"></span><br/>
-                                <strong>Fecha Nac.:</strong> <span th:text="${usuario.FechaNacimiento}"></span><br/>
-                                <strong>Teléfono:</strong> <span th:text="${usuario.Telefono}"></span><br/>
-                                <strong>Celular:</strong> <span th:text="${usuario.Celular}"></span><br/>
-                                <strong>CURP:</strong> <span th:text="${usuario.Curp}"></span><br/>
+
+                            <td th:classappend="${usuario.status == 0} ? 'celda-bloqueada' : ''">
+                                <div class="btn-group" role="group" 
+                                     th:classappend="${usuario.status == 0} ? 'acciones-deshabilitadas' : ''">
+                                    <button th:onclick="|EliminarUsuario(${usuario.IdUsuario})|" class="btn btn-danger">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                    <a th:href="@{usuario/detail/{IdUsuario} (IdUsuario = ${usuario.IdUsuario})}" class="btn btn-warning">
+                                        <i class="bi bi-vector-pen"></i>
+                                    </a>
+                                </div>
                             </td>
-                            <td>
+
+                            <td th:classappend="${usuario.status == 0} ? 'celda-bloqueada' : ''"
+                                th:text="|${usuario.Nombre} ${usuario.ApellidoPaterno} ${usuario.ApellidoMaterno}|"> 
+                            </td>
+
+                            <td class="text-start" th:classappend="${usuario.status == 0} ? 'celda-bloqueada' : ''"> 
+                                <ul>
+                                    <li th:text="${usuario.Telefono}"></li>
+                                    <li th:text="${usuario.FechaNacimiento}"></li>
+                                    <li th:text="${usuario.Username}"></li>
+                                    <li th:text="${usuario.Email}"></li>
+                                    <li th:text="${usuario.Sexo}"></li>  
+                                    <li th:text="${usuario.Celular}"></li>  
+                                    <li th:text="${usuario.Curp}"></li>  
+                                    <li th:text="${usuario.status}"></li>  
+                                </ul>
+                            </td>
+
+                            <td th:classappend="${usuario.status == 0} ? 'celda-bloqueada' : ''">
                                 <ul th:if="${usuario.Direcciones != null}">
-                                    <li th:each="direccion: ${usuario.Direcciones}" th:text="|${direccion.Calle} ${direccion.NumeroExterior} ${direccion.NumeroInterior}|">Direccion</li>              
-                                </ul>
-                                <ul th:unless="${usuario.Direcciones != null}">
-                                    <li>Sin direccion.</li>
+                                    <li th:each="direccion : ${usuario.Direcciones}" th:text="${direccion.Calle}"></li>
                                 </ul>
                             </td>
-                            <td class="table-info">
-                                <a th:href="@{/usuario/detail/{IdUsuario} (IdUsuario = ${usuario.IdUsuario})}" class="btn btn-light btn-sm mb-1">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-                                <a class="btn btn-danger btn-sm mb-1">
-                                    <i class="bi bi-trash3-fill"></i>
-                                </a>
-                            </td>
-                            <td class="table-info">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" value="" id="status" switch>
-                                    <label class="form-check-label" for="status"></label>
+
+                            <td>
+                                <div class="form-check form-switch d-flex justify-content-center">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           role="switch"
+                                           th:id="'switch' + ${usuario.IdUsuario}"
+                                           th:checked="${usuario.status == 1}"
+                                           th:onchange="|cambiarEstatus(this, ${usuario.IdUsuario})|">
                                 </div>
                             </td>
                         </tr>
-                    </tbody>
+                    </tbody>                
                 </table>
             </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script>
+
+                function cambiarEstatus(checkbox, IdUsuario) {
+                    const nuevostatus = checkbox.checked ? 1 : 0;
+                    const usuarioData = {
+                        estatus: nuevostatus
+                    };
+                    Swal.fire({
+                        title: "¿Estas seguro de cambiar el estatus del usuario?",
+                        text: "Se va a cambiar el usuario",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Si, cambiar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch("http://localhost:8080/api/usuario/status/"+ IdUsuario + "/" + nuevostatus, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(usuarioData)
+                            })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.Correct) {
+                                            Swal.fire("¡Modificado!", "El usuario se modifico correctamente", "success")
+                                                    .then(() => {
+                                                        location.reload();
+                                                    });
+                                        } else {
+                                            Swal.fire("Error", data.ErrorMessage, "error");
+                                        }
+                                    })
+                                    .catch(error => {
+                                        Swal.fire("Error", "Ocurrió un fallo en la conexión", "error");
+                                    });
+                        } else {
+
+                            checkbox.checked = !checkbox.checked;
+                        }
+                    });
+                }
+
+
+                function EliminarUsuario(IdUsuario) {
+                    Swal.fire({
+                        title: "¿Estas seguro de eliminar el usuario?",
+                        text: "El usuario se va a eliminar",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Si, borrar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch("http://localhost:8080/api/usuario/" + IdUsuario, {
+                                method: 'DELETE'
+                            })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.Correct) {
+                                            Swal.fire("¡Borrado!", "El usuario se eliminó correctamente", "success")
+                                                    .then(() => {
+                                                        location.reload();
+                                                    });
+                                        } else {
+                                            Swal.fire("Error", data.ErrorMessage, "error");
+                                        }
+                                    })
+                                    .catch(error => {
+                                        Swal.fire("Error", "Ocurrió un fallo en la conexión", "error");
+                                    });
+                        }
+                    });
+                }
+            </script>
 
         </div>
 

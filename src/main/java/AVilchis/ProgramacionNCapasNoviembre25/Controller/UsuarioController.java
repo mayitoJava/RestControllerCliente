@@ -16,11 +16,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 @Controller
@@ -76,19 +78,41 @@ public class UsuarioController {
         return "UsuarioForm";
     }
     
+    @PostMapping("/add")
+    public String Add(@ModelAttribute Usuario usuario) {
 
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpEntity<Usuario> httpEntity = new HttpEntity<>(usuario);
+
+        ResponseEntity<Result<Usuario>> responseEntity
+                = restTemplate.exchange(
+                        urlBase + "/usuario",
+                        HttpMethod.POST,
+                        httpEntity,
+                        new ParameterizedTypeReference<Result<Usuario>>() {
+                }
+                );
+
+        if (responseEntity.getStatusCode().value() == 200) {
+            return "redirect:/usuario";
+        } else {
+            return "UsuarioForm";
+        }
+    }
 
     @GetMapping("detail/{IdUsuario}")
     public String Detail(@PathVariable("IdUsuario") int IdUsuario, Model model) {
-        
+
         RestTemplate restTemplate = new RestTemplate();
 
         ResponseEntity<Result<Usuario>> responseEntity
                 = restTemplate.exchange(urlBase + "/usuario/" + IdUsuario, HttpMethod.GET,
                         HttpEntity.EMPTY, new ParameterizedTypeReference<Result<Usuario>>() {
                 });
+       
 
-         ResponseEntity<Result<List<Rol>>> responseEntityRol
+        ResponseEntity<Result<List<Rol>>> responseEntityRol
                 = restTemplate.exchange(urlBase + "/rol", HttpMethod.GET,
                         HttpEntity.EMPTY, new ParameterizedTypeReference<Result<List<Rol>>>() {
                 });
@@ -101,7 +125,7 @@ public class UsuarioController {
                 });
 
         Result resultPais = responseEntityPais.getBody();
-        
+
         if (responseEntity.getStatusCode().value() == 200) {
             Result result = responseEntity.getBody();
 
@@ -110,14 +134,67 @@ public class UsuarioController {
             model.addAttribute("pais", resultPais.Object);
 
             model.addAttribute("usuario", result.Object);
-            
+
             model.addAttribute("Direccion", new Direccion());
         }
 
         return "UsuarioEditar";
     }
+
     
-    
-    
+//    @PostMapping("/update")
+//    public String Update(@ModelAttribute Usuario usuario) {
+//
+//        RestTemplate restTemplate = new RestTemplate();
+//
+//        HttpEntity<Usuario> httpEntity = new HttpEntity<>(usuario);
+//
+//        ResponseEntity<Result<Usuario>> responseEntity
+//                = restTemplate.exchange(
+//                        urlBase + "/usuario",
+//                        HttpMethod.PUT,
+//                        httpEntity,
+//                        new ParameterizedTypeReference<Result<Usuario>>() {
+//                }
+//                );
+//
+//        if (responseEntity.getStatusCode().value() == 200) {
+//            return "redirect:/usuario";
+//        } else {
+//            return "UsuarioForm";
+//        }
+//    }
+//
+//    @PostMapping("/search")
+//    public String BuscarUsuarios(@ModelAttribute("UsuariosBusqueda") Usuario usuario, Model model) {
+//
+//        RestTemplate restTemplate = new RestTemplate();
+//
+//        ResponseEntity<Result<List<Rol>>> responseEntityRol
+//                = restTemplate.exchange(urlBase + "/rol", HttpMethod.GET,
+//                        HttpEntity.EMPTY, new ParameterizedTypeReference<Result<List<Rol>>>() {
+//                });
+//
+//        Result resultRol = responseEntityRol.getBody();
+//
+//        HttpEntity<Usuario> requestEntity = new HttpEntity<>(usuario);
+//
+//        ResponseEntity<Result<Usuario>> responseEntity = restTemplate.exchange(
+//                urlBase + "usuario/getAllDinamico",
+//                HttpMethod.POST,
+//                requestEntity,
+//                new ParameterizedTypeReference<Result<Usuario>>() {
+//        }
+//        );
+//
+//        Result result = responseEntity.getBody();
+//
+//        model.addAttribute("usuarioBusqueda", new Usuario());
+//
+//        model.addAttribute("Roles", resultRol.Object);
+//
+//        model.addAttribute("Usuarios", result.Objects);
+//        return "Usuario";
+//    }
 
 }

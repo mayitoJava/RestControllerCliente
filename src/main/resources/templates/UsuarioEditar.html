@@ -106,9 +106,9 @@
                                             <i class="bi bi-pencil-square"></i> Editar
                                         </a>
 
-                                        <a class="btn btn-danger btn-sm">
-                                            <i class="bi bi-trash"></i> Borrar
-                                        </a>
+                                        <button th:onclick="|EliminarDireccion(${direccion.IdDireccion})|" class="btn btn-danger">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
                                     </div>
                                 </div>
                             </div>
@@ -133,13 +133,13 @@
                     <div class="modal-body">
                         <form th:object="${Direccion}" method="post" th:action="@{/usuario/GuardarDireccion}">
                             <input type="hidden" id="hiddenIdDireccion" th:field="*{IdDireccion}"/>
-
+                            
                             <div class="row g-3">
-
+           
                                 <!-- Calle -->
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control" id="intpCalle" placeholder="Calle" th:field="*{calle}">
+                                        <input type="text" class="form-control" placeholder="Calle" th:field="*{calle}">
                                         <label for="intpCalle">Calle</label>
                                     </div>
                                 </div>
@@ -147,7 +147,7 @@
                                 <!-- Número Exterior -->
                                 <div class="col-md-3">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control" id="intpNumeroExterior" placeholder="No. Exterior" th:field="*{numeroExterior}">
+                                        <input type="text" class="form-control" placeholder="No. Exterior" th:field="*{numeroExterior}">
                                         <label for="intpNumeroExterior">Número Exterior</label>
                                     </div>
                                 </div>
@@ -155,7 +155,7 @@
                                 <!-- Número Interior -->
                                 <div class="col-md-3">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control" id="intpNumeroInterior" placeholder="No. Interior" th:field="*{numeroInterior}">
+                                        <input type="text" class="form-control" placeholder="No. Interior" th:field="*{numeroInterior}">
                                         <label for="intpNumeroInterior">Número Interior</label>
                                     </div>
                                 </div>
@@ -359,8 +359,11 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+        
+        
 
         $(document).ready(function () {
             console.log("Ya prendí tu :)");
@@ -456,6 +459,38 @@
             });
         });
 
+        //Eliminar direccion
+        function EliminarDireccion(IdDireccion) {
+                    Swal.fire({
+                        title: "¿Estas seguro de eliminar la direccion",
+                        text: "La direccion se va a eliminar",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Si, borrar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch("http://localhost:8080/api/direccion/" + IdDireccion, {
+                                method: 'DELETE'
+                            })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.Correct) {
+                                            Swal.fire("¡Borrado!", "El usuario se eliminó correctamente", "success")
+                                                    .then(() => {
+                                                        location.reload();
+                                                    });
+                                        } else {
+                                            Swal.fire("Error", data.ErrorMessage, "error");
+                                        }
+                                    })
+                                    .catch(error => {
+                                        Swal.fire("Error", "Ocurrió un fallo en la conexión", "error");
+                                    });
+                        }
+                    });
+                }
     </script>
 
 

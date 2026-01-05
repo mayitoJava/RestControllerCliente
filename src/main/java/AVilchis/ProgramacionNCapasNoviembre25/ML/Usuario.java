@@ -2,6 +2,7 @@ package AVilchis.ProgramacionNCapasNoviembre25.ML;
 
 import java.util.Date;
 import java.util.List;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class Usuario {
 
@@ -12,11 +13,13 @@ public class Usuario {
     private String ApellidoMaterno;
     private String Email;
     private String Password;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date FechaNacimiento;
     private String Sexo;
     private String Telefono;
     private String Curp;
     private String Celular;
+    private int Status;
     public Rol Rol;
     public List<Direccion> Direcciones;
 
@@ -26,6 +29,14 @@ public class Usuario {
 
     public void setIdUsuario(int IdUsuario) {
         this.IdUsuario = IdUsuario;
+    }
+
+    public int getStatus() {
+        return Status;
+    }
+
+    public void setStatus(int Status) {
+        this.Status = Status;
     }
 
     public String getUsername() {

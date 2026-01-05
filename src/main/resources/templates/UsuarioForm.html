@@ -20,7 +20,7 @@
 
     <body class="container mt-4">
 
-        <form method="post" th:object="${usuario}" th:action="@{/usuario/formEditable}" class="p-4 border rounded shadow-sm bg-light">
+        <form method="post" th:object="${usuario}" th:action="@{/usuario/add}" class="p-4 border rounded shadow-sm bg-light">
             <h4 class="mb-4 text-primary"><i class="bi bi-person-square"></i> Datos del Usuario</h4>
 
             <input type="hidden" th:field="*{IdUsuario}">
@@ -34,9 +34,9 @@
                 <div class="col-md-4">
                     <div class="form-floating">
                         <input type="text" class="form-control" id="NombreUsuario" placeholder="Nombre"
-                               th:field="*{Nombre}" onkeypress="SoloLetras(event, this)">
+                               th:field="*{Nombre}">
                         <label for="NombreUsuario"><i class="bi bi-emoji-grin-fill"></i> Nombre</label>
-                        <div class="text-danger mt-1" th:if="${#fields.hasErrors('Nombre')}" th:errors="*{Nombre}"></div>
+
                     </div>
                 </div>
 
@@ -44,10 +44,9 @@
                 <div class="col-md-4">
                     <div class="form-floating">
                         <input type="text" class="form-control" id="ApellidoPaterno" placeholder="Apellido Paterno"
-                               th:field="*{ApellidoPaterno}" onkeypress="SoloLetras(event, this)">
+                               th:field="*{ApellidoPaterno}" >
                         <label for="ApellidoPaterno"><i class="bi bi-gender-male"></i> Apellido Paterno</label>
-                        <div class="text-danger mt-1" th:if="${#fields.hasErrors('ApellidoPaterno')}" 
-                             th:errors="${usuario.ApellidoPaterno}"></div>
+
                     </div>
                 </div>
 
@@ -55,10 +54,9 @@
                 <div class="col-md-4">
                     <div class="form-floating">
                         <input type="text" class="form-control" id="ApellidoMaterno" placeholder="Apellido Materno"
-                               th:field="*{ApellidoMaterno}" onkeypress="SoloLetras(event, this)">
+                               th:field="*{ApellidoMaterno}">
                         <label for="ApellidoMaterno"><i class="bi bi-gender-female"></i> Apellido Materno</label>
-                        <div class="text-danger mt-1" th:if="${#fields.hasErrors('ApellidoMaterno')}" 
-                             th:errors="${usuario.ApellidoMaterno}"></div>
+
                     </div>
                 </div>
 
@@ -66,10 +64,9 @@
                 <div class="col-md-3">
                     <div class="form-floating">
                         <input type="text" class="form-control" id="Username" placeholder="Username"
-                               th:field="*{Username}" onblur="validarUsername(event, this)">
+                               th:field="*{Username}" >
                         <label for="Username"><i class="bi bi-person-fill"></i> Username</label>
-                        <div class="text-danger mt-1" th:if="${#fields.hasErrors('Username')}" 
-                             th:errors="${usuario.Username}"></div>
+
                     </div>
                 </div>
 
@@ -77,10 +74,9 @@
                 <div class="col-md-3">
                     <div class="form-floating">
                         <input type="email" class="form-control" id="Email" placeholder="Email"
-                               th:field="${usuario.Email}" onblur="validarCorreo(event, this)">
+                               th:field="${usuario.Email}" >
                         <label for="Email"><i class="bi bi-envelope-fill"></i> Email</label>
-                        <div class="text-danger mt-1" th:if="${#fields.hasErrors('Email')}" 
-                             th:errors="${usuario.Email}"></div>
+
                     </div>
                 </div>
 
@@ -88,10 +84,9 @@
                 <div class="col-md-3">
                     <div class="form-floating">
                         <input type="text" class="form-control" id="Password" placeholder="Password"
-                               th:field="${usuario.Password}" onblur="validarPassword(event, this)">
+                               th:field="${usuario.Password}" >
                         <label for="Password"><i class="bi bi-key"></i> Password</label>
-                        <div class="text-danger mt-1" th:if="${#fields.hasErrors('Password')}" 
-                             th:errors="${usuario.Password}"></div>
+
                     </div>
                 </div>
 
@@ -99,10 +94,9 @@
                 <div class="col-md-3">
                     <div class="form-floating">
                         <input type="date" class="form-control" id="FechaNacimiento"
-                               th:field="${usuario.FechaNacimiento}" onblur="validarFecha(event, this)">
+                               th:field="${usuario.FechaNacimiento}">
                         <label for="FechaNacimiento"><i class="bi bi-calendar"></i> Fecha Nacimiento</label>
-                        <div class="text-danger mt-1" th:if="${#fields.hasErrors('FechaNacimiento')}" 
-                             th:errors="${usuario.FechaNacimiento}"></div>
+
                     </div>
                 </div>
 
@@ -223,207 +217,100 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
         <script>
-                                   function SoloLetras(event, input) {
-                                       let key = event.key;
-                                       let asci = event.keyCode;
-                                       let RegExp = /[a-zA-Z]+/;
-                                       if (asci >= 65 && asci <= 90 || asci >= 97 && asci <= 122) {
 
-                                           if (RegExp.test(key)) {
-                                               $(input).removeClass("error").addClass("correct");
-                                               $(input).siblings(".error-msg").text(" ");
-                                           } else {
-                                               $(input).removeClass("correct").addClass("error");
-                                               $(input).siblings(".error-msg").text("Solo Letras");
-                                               event.preventDefault();
-                                           }
-                                       } else {
-                                           $(input).removeClass("correct").addClass("error");
-                                           $(input).siblings(".error-msg").text("Solo Letras");
-                                           event.preventDefault();
-                                       }
-                                   }
+            $(document).ready(function () {
+                console.log("Ya prendí tu :)");
 
-                                   function validarUsername(event, input) { //validacion username
-                                       let cadena = event.target.value;
-                                       let regex = /^(?=.*[0-9])[A-Z][a-zA-Z0-9(#$%&)]+$/; // Solo letras, números y caracter especial
+                // Cuando cambias el país
+                $("#ddlPais").change(function () {
+                    var idPais = $("#ddlPais").val();
 
-                                       if (regex.test(cadena)) {
-                                           $(input).removeClass("error").addClass("correct");
-                                           $(input).siblings(".error-msg").text(" ");
-                                       } else {
-                                           $(input).removeClass("correct").addClass("error");
-                                           $(input).siblings(".error-msg").text("Solo letras y números");
-                                           event.preventDefault();
-                                       }
-                                   }
+                    // Limpiamos los dropdowns inferiores
+                    $("#ddlEstado").empty().append("<option value='0' selected>Selecciona un Estado</option>");
+                    $("#ddlMunicipio").empty().append("<option value='0' selected>Selecciona un Municipio</option>");
+                    $("#ddlColonia").empty().append("<option value='0' selected>Selecciona una Colonia</option>");
 
-                                   function validarPassword(event, input) {
-                                       let password = event.target.value;
-                                       let PasExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/;
-                                       if (PasExp.test(password)) {
-                                           $(input).removeClass("error").addClass("correct");
-                                           $(input).siblings(".error-msg").text("");
-                                       } else {
-                                           $(input).removeClass("correct").addClass("error");
-                                           $(input).siblings(".error-msg").text("La contraseña no cumple los requisitos");
-                                       }
-                                   }
+                    if (idPais == 0)
+                        return;
 
-                                   function validarCorreo(event, input) {
-                                       let correo = event.target.value;
-                                       let EmailExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-                                       if (EmailExp.test(correo)) {
-                                           $(input).removeClass("error").addClass("correct");
-                                           $(input).siblings(".error-msg").text("");
-                                       } else {
-                                           $(input).removeClass("correct").addClass("error");
-                                           $(input).siblings(".error-msg").text("Correo inválido");
-                                       }
-                                   }
+                    $.ajax({
+                        url: "http://localhost:8080/api/estado/GetEstadoByPais/" + idPais,
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.Correct) {
+                                $.each(data.Object, function (i, estado) {
+                                    $("#ddlEstado").append("<option value='" + estado.idEstado + "'>" + estado.nombre + "</option>");
+                                });
+                            } else {
+                                alert("No se pudieron cargar los estados: " + data.ErrorMessage);
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert("Error al obtener estados: " + textStatus);
+                        }
+                    });
+                });
 
-                                   function validarFecha(event, input) {
-                                       let fechaInput = event.target.value;
-                                       let errorSpan = $(input).siblings(".error-msg");
-                                       let fechaValida = new Date(fechaInput);
-                                       let hoy = new Date();
-                                       if (fechaValida > hoy) {
-                                           $(input).removeClass("correct").addClass("error");
-                                           errorSpan.text("La fecha no puede ser mayor a hoy.");
-                                           return false;
-                                       } else {
-                                           $(input).removeClass("error").addClass("correct");
-                                           errorSpan.text("");
-                                           return true;
-                                       }
-                                   }
+                // Cuando cambias el estado
+                $("#ddlEstado").change(function () {
+                    var idEstado = $("#ddlEstado").val();
 
-                                   function validarCurp(event, input) {
-                                       let password = event.target.value;
-                                       let CurExp = /^[A-Z]{4}\d{6}[HM][A-Z]{2}[B-DF-HJ-NP-TV-Z]{3}[A-Z0-9]\d$/;
-                                       if (CurExp.test(password)) {
-                                           $(input).removeClass("error").addClass("correct");
-                                           $(input).siblings(".error-msg").text("");
-                                       } else {
-                                           $(input).removeClass("correct").addClass("error");
-                                           $(input).siblings(".error-msg").text("Tu CURP no cumple los requisitos");
-                                       }
-                                   }
+                    // Limpiamos los dropdowns inferiores
+                    $("#ddlMunicipio").empty().append("<option value='0' selected>Selecciona un Municipio</option>");
+                    $("#ddlColonia").empty().append("<option value='0' selected>Selecciona una Colonia</option>");
 
-                                   function validarSexo() {
-                                       const sexoSeleccionado = document.querySelector('input[name="sexo"]:checked');
-                                       if (sexoSeleccionado) {
-                                           alert("Sexo seleccionado: " + sexoSeleccionado.value);
-                                       } else {
-                                           alert("Por favor selecciona un sexo.");
-                                       }
-                                   }
+                    if (idEstado == 0)
+                        return;
 
-                                   function validarNumero(event, input) {
-                                       let numero = event.target.value;
-                                       let RegExp = /^(?:\d-?){10}$/;
-                                       if (RegExp.test(numero)) {
-                                           $(input).removeClass("error").addClass("correct");
-                                           $(input).siblings(".error-msg").text("");
-                                       } else {
-                                           $(input).removeClass("correct").addClass("error");
-                                           $(input).siblings(".error-msg").text("Escribe bien el numero");
-                                       }
-                                   }
+                    $.ajax({
+                        url: "http://localhost:8080/api/municipio/GetMunicipioByEstado/" + idEstado,
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.Correct) {
+                                $.each(data.Object, function (i, municipio) {
+                                    $("#ddlMunicipio").append("<option value='" + municipio.idMunicipio + "'>" + municipio.nombre + "</option>");
+                                });
+                            } else {
+                                alert("No se pudieron cargar los municipios: " + data.ErrorMessage);
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert("Error al obtener municipios: " + textStatus);
+                        }
+                    });
+                });
 
-                                   $(document).ready(function () {
-                                       console.log("Ya prendí tu :)");
+                // Cuando cambias el municipio
+                $("#ddlMunicipio").change(function () {
+                    var idMunicipio = $("#ddlMunicipio").val();
 
-                                       // Cuando cambias el país
-                                       $("#ddlPais").change(function () {
-                                           var idPais = $("#ddlPais").val();
+                    // Limpiamos el dropdown de colonias
+                    $("#ddlColonia").empty().append("<option value='0' selected>Selecciona una Colonia</option>");
 
-                                           // Limpiamos los dropdowns inferiores
-                                           $("#ddlEstado").empty().append("<option value='0' selected>Selecciona un Estado</option>");
-                                           $("#ddlMunicipio").empty().append("<option value='0' selected>Selecciona un Municipio</option>");
-                                           $("#ddlColonia").empty().append("<option value='0' selected>Selecciona una Colonia</option>");
+                    if (idMunicipio == 0)
+                        return;
 
-                                           if (idPais == 0)
-                                               return;
-
-                                           $.ajax({
-                                               url: "http://localhost:8080/api/estado/GetEstadoByPais/" + idPais,
-                                               method: 'GET',
-                                               dataType: 'json',
-                                               success: function (data) {
-                                                   if (data.Correct) {
-                                                       $.each(data.Object, function (i, estado) {
-                                                           $("#ddlEstado").append("<option value='" + estado.idEstado + "'>" + estado.nombre + "</option>");
-                                                       });
-                                                   } else {
-                                                       alert("No se pudieron cargar los estados: " + data.ErrorMessage);
-                                                   }
-                                               },
-                                               error: function (jqXHR, textStatus, errorThrown) {
-                                                   alert("Error al obtener estados: " + textStatus);
-                                               }
-                                           });
-                                       });
-
-                                       // Cuando cambias el estado
-                                       $("#ddlEstado").change(function () {
-                                           var idEstado = $("#ddlEstado").val();
-
-                                           // Limpiamos los dropdowns inferiores
-                                           $("#ddlMunicipio").empty().append("<option value='0' selected>Selecciona un Municipio</option>");
-                                           $("#ddlColonia").empty().append("<option value='0' selected>Selecciona una Colonia</option>");
-
-                                           if (idEstado == 0)
-                                               return;
-
-                                           $.ajax({
-                                               url: "http://localhost:8080/api/municipio/GetMunicipioByEstado/" + idEstado,
-                                               method: 'GET',
-                                               dataType: 'json',
-                                               success: function (data) {
-                                                   if (data.Correct) {
-                                                       $.each(data.Object, function (i, municipio) {
-                                                           $("#ddlMunicipio").append("<option value='" + municipio.idMunicipio + "'>" + municipio.nombre + "</option>");
-                                                       });
-                                                   } else {
-                                                       alert("No se pudieron cargar los municipios: " + data.ErrorMessage);
-                                                   }
-                                               },
-                                               error: function (jqXHR, textStatus, errorThrown) {
-                                                   alert("Error al obtener municipios: " + textStatus);
-                                               }
-                                           });
-                                       });
-
-                                       // Cuando cambias el municipio
-                                       $("#ddlMunicipio").change(function () {
-                                           var idMunicipio = $("#ddlMunicipio").val();
-
-                                           // Limpiamos el dropdown de colonias
-                                           $("#ddlColonia").empty().append("<option value='0' selected>Selecciona una Colonia</option>");
-
-                                           if (idMunicipio == 0)
-                                               return;
-
-                                           $.ajax({
-                                               url: "http://localhost:8080/api/colonia/GetColoniaByMunicipio/" + idMunicipio,
-                                               method: 'GET',
-                                               dataType: 'json',
-                                               success: function (data) {
-                                                   if (data.Correct) {
-                                                       $.each(data.Object, function (i, colonia) {
-                                                           $("#ddlColonia").append("<option value='" + colonia.idColonia + "'>" + colonia.nombre + "</option>");
-                                                       });
-                                                   } else {
-                                                       alert("No se pudieron cargar las colonias: " + data.ErrorMessage);
-                                                   }
-                                               },
-                                               error: function (jqXHR, textStatus, errorThrown) {
-                                                   alert("Error al obtener colonias: " + textStatus);
-                                               }
-                                           });
-                                       });
-                                   });
+                    $.ajax({
+                        url: "http://localhost:8080/api/colonia/GetColoniaByMunicipio/" + idMunicipio,
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.Correct) {
+                                $.each(data.Object, function (i, colonia) {
+                                    $("#ddlColonia").append("<option value='" + colonia.idColonia + "'>" + colonia.nombre + "</option>");
+                                });
+                            } else {
+                                alert("No se pudieron cargar las colonias: " + data.ErrorMessage);
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert("Error al obtener colonias: " + textStatus);
+                        }
+                    });
+                });
+            });
 
         </script>
 
