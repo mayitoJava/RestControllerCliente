@@ -81,7 +81,7 @@
                     <div class="card-body"> 
                         <button type="button" class="btn btn-secondary"
                                 data-bs-toggle="modal"
-                                data-bs-target="#modalDireccion">
+                                data-bs-target="#modalDireccionAdd">
                             <i class="bi bi-geo-alt-fill me-1"></i> Agregar dirección
                         </button>
                         </br>
@@ -127,7 +127,7 @@
 
                     <!-- Body -->
                     <div class="modal-body">
-                        <form th:object="${Direccion}" method="post" th:action="@{/usuario/GuardarDireccion}">
+                        <form th:object="${Direccion}" method="post">
                             <input type="hidden" id="hiddenIdDireccion" th:field="${Direccion.IdDireccion}"/>
 
                             <div class="row g-3">
@@ -181,308 +181,484 @@
                                         <option value="0">Selecciona una Colonia</option>
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-success" id="btnGuardarDireccion">Guardar dirección</button>
                         </form>
                     </div>
                 </div>
 
                 <!-- Footer -->
                 <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" id="btnGuardarDireccion">Guardar dirección</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-
                 </div>
-
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="modalUsuario" tabindex="-1"
-         aria-labelledby="modalUsuarioLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal fade" id="modalDireccionAdd" tabindex="-1"
+         aria-labelledby="modalDireccionLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
 
                 <!-- Header -->
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalUsuarioLabel">
-                        Datos del Usuario
-                    </h5>
+                    <h5 class="modal-title" id="modalDireccionLabel">Dirección</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
                 <!-- Body -->
                 <div class="modal-body">
-                    <form th:object="${usuario}" method="post">
-
-                        <!-- ID oculto -->
-                        <input type="hidden" th:field="*{IdUsuario}">
+                    <form th:object="${Direccion}" method="post">
+                        <input type="hidden" id="hiddenIdDireccion" th:field="${Direccion.IdDireccion}"/>
 
                         <div class="row g-3">
 
-                            <!-- Nombre -->
-                            <div class="col-md-4">
+                            <!-- Calle -->
+                            <div class="col-md-6">
                                 <div class="form-floating">
-                                    <input type="text" class="form-control" th:field="*{nombre}">
-                                    <label>Nombre</label>
+                                    <input type="text" class="form-control" id="intpCalle" th:field="*{calle}">
+                                    <label for="intpCalle">Calle</label>
                                 </div>
                             </div>
 
-                            <!-- Apellido Paterno -->
-                            <div class="col-md-4">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" th:field="*{apellidoPaterno}">
-                                    <label>Apellido Paterno</label>
-                                </div>
-                            </div>
-
-                            <!-- Apellido Materno -->
-                            <div class="col-md-4">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" th:field="*{apellidoMaterno}">
-                                    <label>Apellido Materno</label>
-                                </div>
-                            </div>
-
-                            <!-- Username -->
+                            <!-- Número Exterior -->
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <input type="text" class="form-control" th:field="*{username}">
-                                    <label>Username</label>
+                                    <input type="text" class="form-control" id="intpNumeroExterior"  th:field="*{numeroExterior}">
+                                    <label for="intpNumeroExterior">Número Exterior</label>
                                 </div>
                             </div>
 
-                            <!-- Email -->
+                            <!-- Número Interior -->
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <input type="email" class="form-control" th:field="*{email}">
-                                    <label>Email</label>
+                                    <input type="text" class="form-control" id="intpNumeroInterior" th:field="*{numeroInterior}">
+                                    <label for="intpNumeroInterior">Número Interior</label>
                                 </div>
                             </div>
 
-                            <!-- Password -->
                             <div class="col-md-3">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" th:field="*{password}">
-                                    <label>Password</label>
-                                </div>
-                            </div>
-
-                            <!-- Fecha Nacimiento -->
-                            <div class="col-md-3">
-                                <div class="form-floating">
-                                    <input type="date" class="form-control" th:field="*{fechaNacimiento}">
-                                    <label>Fecha Nacimiento</label>
-                                </div>
-                            </div>
-
-                            <!-- Celular -->
-                            <div class="col-md-4">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" th:field="*{celular}">
-                                    <label>Celular</label>
-                                </div>
-                            </div>
-
-                            <!-- Teléfono -->
-                            <div class="col-md-4">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" th:field="*{telefono}">
-                                    <label>Teléfono</label>
-                                </div>
-                            </div>
-
-                            <!-- CURP -->
-                            <div class="col-md-4">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" th:field="*{curp}">
-                                    <label>CURP</label>
-                                </div>
-                            </div>
-
-                            <!-- Sexo -->
-                            <div class="col-md-4">
-                                <label class="form-label">Sexo</label>
-                                <div class="d-flex gap-4 mt-1">
-                                    <div class="form-check">
-                                        <input class="form-check-input"
-                                               type="radio"
-                                               id="sexoMasculino"
-                                               th:field="*{sexo}"
-                                               th:value="M ">
-                                        <label class="form-check-label" for="sexoMasculino">
-                                            Masculino
-                                        </label>
-                                    </div>
-
-                                    <div class="form-check">
-                                        <input class="form-check-input"
-                                               type="radio"
-                                               id="sexoFemenino"
-                                               th:field="*{sexo}"
-                                               th:value="F ">
-                                        <label class="form-check-label" for="sexoFemenino">
-                                            Femenino
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <!-- Rol -->
-                            <div class="col-md-4">
-                                <label for="RolUsuario" class="form-label"><i class="bi bi-controller"></i> Rol</label>
-                                <select class="form-select" id="RolUsuario" th:field="${usuario.Rol.IdRol}">
-                                    <option value="0">Selecciona un rol</option>
-                                    <option th:each="rol: ${rol}" th:text="${rol.Nombre}" th:value="${rol.IdRol}"></option>
+                                <label class="form-label">País</label>
+                                <select id="ddlPais" class="form-select">
+                                    <option value="0">Selecciona un País</option>
+                                    <option th:each="pais: ${pais}" th:text="${pais.Nombre}" th:value="${pais.IdPais}"></option>
                                 </select>
                             </div>
-
-                        </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Estado</label>
+                                <select id="ddlEstado" class="form-select">
+                                    <option value="0">Selecciona un Estado</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Municipio</label>
+                                <select id="ddlMunicipio" class="form-select">
+                                    <option value="0">Selecciona un Municipio</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Colonia</label>
+                                <select id="ddlColonia" class="form-select" th:field="${Direccion.Colonia.IdColonia}">
+                                    <option value="0">Selecciona una Colonia</option>
+                                </select>
+                            </div>
                     </form>
                 </div>
-
-                <!-- Footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Cerrar
-                    </button>
-                    <button type="submit" class="btn btn-success">
-                        Guardar
-                    </button>
-                </div>
-
             </div>
+
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" id="btnGuardarDireccion">Guardar dirección</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+
         </div>
     </div>
+</div>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<div class="modal fade" id="modalUsuario" tabindex="-1"
+     aria-labelledby="modalUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
 
-    <script>
+            <!-- Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalUsuarioLabel">
+                    Datos del Usuario
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
 
-        $(document).ready(function () {
-            console.log("Ya prendí tu :)");
+            <!-- Body -->
+            <div class="modal-body">
+                <form th:object="${usuario}" method="post">
 
-            // Cuando cambias el país
-            $("#ddlPais").change(function () {
-                var idPais = $("#ddlPais").val();
+                    <!-- ID oculto -->
+                    <input type="hidden" th:field="*{IdUsuario}">
 
-                // Limpiamos los dropdowns inferiores
-                $("#ddlEstado").empty().append("<option value='0' selected>Selecciona un Estado</option>");
-                $("#ddlMunicipio").empty().append("<option value='0' selected>Selecciona un Municipio</option>");
-                $("#ddlColonia").empty().append("<option value='0' selected>Selecciona una Colonia</option>");
+                    <div class="row g-3">
 
-                if (idPais == 0)
-                    return;
+                        <!-- Nombre -->
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" th:field="*{nombre}">
+                                <label>Nombre</label>
+                            </div>
+                        </div>
 
-                $.ajax({
-                    url: "http://localhost:8080/api/estado/GetEstadoByPais/" + idPais,
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function (data) {
-                        if (data.Correct) {
-                            $.each(data.Object, function (i, estado) {
-                                $("#ddlEstado").append("<option value='" + estado.idEstado + "'>" + estado.nombre + "</option>");
-                            });
-                        } else {
-                            alert("No se pudieron cargar los estados: " + data.ErrorMessage);
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert("Error al obtener estados: " + textStatus);
+                        <!-- Apellido Paterno -->
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" th:field="*{apellidoPaterno}">
+                                <label>Apellido Paterno</label>
+                            </div>
+                        </div>
+
+                        <!-- Apellido Materno -->
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" th:field="*{apellidoMaterno}">
+                                <label>Apellido Materno</label>
+                            </div>
+                        </div>
+
+                        <!-- Username -->
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" th:field="*{username}">
+                                <label>Username</label>
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <input type="email" class="form-control" th:field="*{email}">
+                                <label>Email</label>
+                            </div>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" th:field="*{password}">
+                                <label>Password</label>
+                            </div>
+                        </div>
+
+                        <!-- Fecha Nacimiento -->
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <input type="date" class="form-control" th:field="*{fechaNacimiento}">
+                                <label>Fecha Nacimiento</label>
+                            </div>
+                        </div>
+
+                        <!-- Celular -->
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" th:field="*{celular}">
+                                <label>Celular</label>
+                            </div>
+                        </div>
+
+                        <!-- Teléfono -->
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" th:field="*{telefono}">
+                                <label>Teléfono</label>
+                            </div>
+                        </div>
+
+                        <!-- CURP -->
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" th:field="*{curp}">
+                                <label>CURP</label>
+                            </div>
+                        </div>
+
+                        <!-- Sexo -->
+                        <div class="col-md-4">
+                            <label class="form-label">Sexo</label>
+                            <div class="d-flex gap-4 mt-1">
+                                <div class="form-check">
+                                    <input class="form-check-input"
+                                           type="radio"
+                                           id="sexoMasculino"
+                                           th:field="*{sexo}"
+                                           th:value="M ">
+                                    <label class="form-check-label" for="sexoMasculino">
+                                        Masculino
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input"
+                                           type="radio"
+                                           id="sexoFemenino"
+                                           th:field="*{sexo}"
+                                           th:value="F ">
+                                    <label class="form-check-label" for="sexoFemenino">
+                                        Femenino
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Rol -->
+                        <div class="col-md-4">
+                            <label for="RolUsuario" class="form-label"><i class="bi bi-controller"></i> Rol</label>
+                            <select class="form-select" id="RolUsuario" th:field="${usuario.Rol.IdRol}">
+                                <option value="0">Selecciona un rol</option>
+                                <option th:each="rol: ${rol}" th:text="${rol.Nombre}" th:value="${rol.IdRol}"></option>
+                            </select>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+                <button type="submit" class="btn btn-success">
+                    Guardar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+    $(document).ready(function () {
+        console.log("Ya prendí tu :)");
+        // Cuando cambias el país
+        $("#ddlPais").change(function () {
+            var idPais = $("#ddlPais").val();
+            // Limpiamos los dropdowns inferiores
+            $("#ddlEstado").empty().append("<option value='0' selected>Selecciona un Estado</option>");
+            $("#ddlMunicipio").empty().append("<option value='0' selected>Selecciona un Municipio</option>");
+            $("#ddlColonia").empty().append("<option value='0' selected>Selecciona una Colonia</option>");
+
+            if (idPais == 0)
+                return;
+            $.ajax({
+                url: "http://localhost:8080/api/estado/GetEstadoByPais/" + idPais,
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Correct) {
+                        $.each(data.Object, function (i, estado) {
+                            $("#ddlEstado").append("<option value='" + estado.idEstado + "'>" + estado.nombre + "</option>");
+                        });
+                    } else {
+                        alert("No se pudieron cargar los estados: " + data.ErrorMessage);
                     }
-                });
-            });
-
-            // Cuando cambias el estado
-            $("#ddlEstado").change(function () {
-                var idEstado = $("#ddlEstado").val();
-                // Limpiamos los dropdowns inferiores
-                $("#ddlMunicipio").empty().append("<option value='0' selected>Selecciona un Municipio</option>");
-                $("#ddlColonia").empty().append("<option value='0' selected>Selecciona una Colonia</option>");
-                if (idEstado == 0)
-                    return;
-                $.ajax({
-                    url: "http://localhost:8080/api/municipio/GetMunicipioByEstado/" + idEstado,
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function (data) {
-                        if (data.Correct) {
-                            $.each(data.Object, function (i, municipio) {
-                                $("#ddlMunicipio").append("<option value='" + municipio.idMunicipio + "'>" + municipio.nombre + "</option>");
-                            });
-                        } else {
-                            alert("No se pudieron cargar los municipios: " + data.ErrorMessage);
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert("Error al obtener municipios: " + textStatus);
-                    }
-                });
-            });
-
-            // Cuando cambias el municipio
-            $("#ddlMunicipio").change(function () {
-                var idMunicipio = $("#ddlMunicipio").val();
-
-                // Limpiamos el dropdown de colonias
-                $("#ddlColonia").empty().append("<option value='0' selected>Selecciona una Colonia</option>");
-
-                if (idMunicipio == 0)
-                    return;
-
-                $.ajax({
-                    url: "http://localhost:8080/api/colonia/GetColoniaByMunicipio/" + idMunicipio,
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function (data) {
-                        if (data.Correct) {
-                            $.each(data.Object, function (i, colonia) {
-                                $("#ddlColonia").append("<option value='" + colonia.idColonia + "'>" + colonia.nombre + "</option>");
-                            });
-                        } else {
-                            alert("No se pudieron cargar las colonias: " + data.ErrorMessage);
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert("Error al obtener colonias: " + textStatus);
-                    }
-                });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Error al obtener estados: " + textStatus);
+                }
             });
         });
 
-        //Eliminar direccion
-        function EliminarDireccion(IdDireccion) {
-            Swal.fire({
-                title: "¿Estas seguro de eliminar la direccion",
-                text: "La direccion se va a eliminar",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Si, borrar"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    fetch("http://localhost:8080/api/direccion/" + IdDireccion, {
-                        method: 'DELETE'
-                    })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.Correct) {
-                                    Swal.fire("¡Borrado!", "El usuario se eliminó correctamente", "success")
-                                            .then(() => {
-                                                location.reload();
-                                            });
-                                } else {
-                                    Swal.fire("Error", data.ErrorMessage, "error");
-                                }
-                            })
-                            .catch(error => {
-                                Swal.fire("Error", "Ocurrió un fallo en la conexión", "error");
-                            });
+        // Cuando cambias el estado
+        $("#ddlEstado").change(function () {
+            var idEstado = $("#ddlEstado").val();
+            // Limpiamos los dropdowns inferiores
+            $("#ddlMunicipio").empty().append("<option value='0' selected>Selecciona un Municipio</option>");
+            $("#ddlColonia").empty().append("<option value='0' selected>Selecciona una Colonia</option>");
+            if (idEstado == 0)
+                return;
+            $.ajax({
+                url: "http://localhost:8080/api/municipio/GetMunicipioByEstado/" + idEstado,
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Correct) {
+                        $.each(data.Object, function (i, municipio) {
+                            $("#ddlMunicipio").append("<option value='" + municipio.idMunicipio + "'>" + municipio.nombre + "</option>");
+                        });
+                    } else {
+                        alert("No se pudieron cargar los municipios: " + data.ErrorMessage);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Error al obtener municipios: " + textStatus);
                 }
             });
-        }
-    </script>
+        });
+
+        // Cuando cambias el municipio
+        $("#ddlMunicipio").change(function () {
+            var idMunicipio = $("#ddlMunicipio").val();
+            // Limpiamos el dropdown de colonias
+            $("#ddlColonia").empty().append("<option value='0' selected>Selecciona una Colonia</option>");
+            if (idMunicipio == 0)
+                return;
+            $.ajax({
+                url: "http://localhost:8080/api/colonia/GetColoniaByMunicipio/" + idMunicipio,
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Correct) {
+                        $.each(data.Object, function (i, colonia) {
+                            $("#ddlColonia").append("<option value='" + colonia.idColonia + "'>" + colonia.nombre + "</option>");
+                        });
+                    } else {
+                        alert("No se pudieron cargar las colonias: " + data.ErrorMessage);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Error al obtener colonias: " + textStatus);
+                }
+            });
+        });
+    });
+
+    //Eliminar direccion por el Id
+    function EliminarDireccion(IdDireccion) {
+        Swal.fire({
+            title: "¿Estas seguro de eliminar la direccion",
+            text: "La direccion se va a eliminar",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Si, borrar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch("http://localhost:8080/api/direccion/" + IdDireccion, {
+                    method: 'DELETE'
+                })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.Correct) {
+                                Swal.fire("¡Borrado!", "El usuario se eliminó correctamente", "success")
+                                        .then(() => {
+                                            location.reload();
+                                        });
+                            } else {
+                                Swal.fire("Error", data.ErrorMessage, "error");
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire("Error", "Ocurrió un fallo en la conexión", "error");
+                        });
+            }
+        });
+    }
+
+    //Traer direccion
+    function ShowModalDireccionEdit(IdDireccion) {
+        console.log("IdDireccion recibido:", IdDireccion);
+
+        $('#hiddenIdDireccion').val(IdDireccion);
+
+        $.ajax({
+            url: "http://localhost:8080/api/direccion/" + IdDireccion,
+            type: 'GET',
+            dataType: 'json',
+            success: function (result) {
+                console.log("RESULTADO COMPLETO:", result);
+
+                // Solo llenar campos de calle y números
+                $('#intpCalle').val(result.Object.calle);
+                $('#intpNumeroExterior').val(result.Object.numeroExterior);
+                $('#intpNumeroInterior').val(result.Object.numeroInterior);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Status:", textStatus);
+                console.error("Error:", errorThrown);
+                console.error("Response:", jqXHR.responseText);
+            }
+        });
+        // Mostrar el modal
+        $('#modalDireccion').modal('show');
+    }
+
+    //update direccion :)
+    function ActualizarDireccion(direccion) {
+        Swal.fire({
+            title: "¿Estas seguro de actualizar la dirección?",
+            text: "La dirección se va a actualizar",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Sí, actualizar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch("http://localhost:8080/api/direccion/editar", {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(direccion) // Aquí enviamos el objeto completo
+                })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.Correct) {
+                                Swal.fire("¡Actualizado!", "La dirección se actualizó correctamente", "success")
+                                        .then(() => {
+                                            location.reload();
+                                        });
+                            } else {
+                                Swal.fire("Error", data.ErrorMessage, "error");
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire("Error", "Ocurrió un fallo en la conexión", "error");
+                        });
+            }
+        });
+    }
+
+    //update usuario :)
+    function ActualizarUsuario(usuario) {
+        Swal.fire({
+            title: "¿Estas seguro de actualizar el usuario?",
+            text: "El usuario se va a actualizar",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Sí, actualizar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch("http://localhost:8080/api/usuario/editar", {
+                    method: "PUT",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(usuario)
+                })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.Correct) {
+                                Swal.fire("¡Actualizado!", "El usuario se actualizó correctamente", "success")
+                                        .then(() => {
+                                            location.reload();
+                                        });
+                            } else {
+                                Swal.fire("Error", data.ErrorMessage, "error");
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire("Error", "Ocurrió un fallo en la conexión", "error");
+                        });
+            }
+        });
+    }
+
+</script>
 
 </body>
 </html>
